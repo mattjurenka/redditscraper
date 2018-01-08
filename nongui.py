@@ -4,7 +4,7 @@ from postscraper import PostScraper
 database = "testtable"
 
 f = open("credentials.txt")
-clientData = [f.readline for i in range(5)]
+clientData = [f.readline().strip("\n") for i in range(5)]
 f.close()
 
 if len(sys.argv) < 5:
