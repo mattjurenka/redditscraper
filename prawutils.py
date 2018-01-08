@@ -86,7 +86,7 @@ class PrawStream():
         self.refresh()
         rows = self.easyconn.select(inittable, "*")
         updatedrows = []
-        for i in range(rows):
+        for i in range(len(rows)):
             try:
                 submission = self.reddit.info([rows[i][index]])
                 score = vars(submission)["score"]
