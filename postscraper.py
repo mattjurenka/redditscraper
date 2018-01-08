@@ -58,10 +58,8 @@ class PostScraper:
             runs += 1
         return runs
     
-    def startScraping(self, period, subr, orgby, limit, periods=True):
+    def startScraping(self, period, subr, orgby, limit):
         self.runs = 0
         while True:
             self.runs = self.run(self.runs, subr, orgby, limit)
-            for i in range(6):
-                time.sleep(300)
-                print("5m elapsed")
+            time.sleep(period)
