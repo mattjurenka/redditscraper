@@ -47,6 +47,7 @@ class PostScraper:
         self.conn.commit()
     
     def run(self, runs, subr, orgby, limit):
+        stime = time.time()
         print("Scraping " + str(limit) + " posts from " + subr + "/" + orgby)
         for i in reversed(range(runs)):
             self.prawstream.update(self.tables[i], self.tables[i+1], 0)
@@ -54,6 +55,8 @@ class PostScraper:
             self.prawstream.commit()
         self.prawstream.export(self.tables[0], subr, orgby, limit, self.desired)
         self.prawstream.commit()
+        ttime = '%.3f'%(time.time()-stime)
+        print("Update finished in " + str(ttime) + " seconds")
         if runs < (len(self.tables) - 1):
             runs += 1
         return runs

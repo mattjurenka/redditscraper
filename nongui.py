@@ -1,11 +1,10 @@
 import sys
 from postscraper import PostScraper
 
-database = "testtable"
+database = "PostScraping"
 
-f = open("credentials.txt")
-clientData = [f.readline().strip("\n") for i in range(5)]
-f.close()
+with open("credentials.txt") as file:
+    clientData = [f.readline().strip("\n") for x in range(5)]
 
 if len(sys.argv) < 5:
     print("Incorrect syntax, correct usage:")
