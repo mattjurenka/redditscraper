@@ -17,7 +17,7 @@ subr = sys.argv[1]
 orgby = sys.argv[2]
 limit = sys.argv[3]
 period = sys.argv[4]
-cycles = sys.argv[5]
+cycles = int(sys.argv[5])
 if period[-1:] == "m":
     period = int(period[:-1]) * 60
 else:
