@@ -1,11 +1,12 @@
 import sys
+import os
 from postscraper import PostScraper
 
-database = "PostScraping"
+os.remove("PostScraping.db")
 
 with open("config.txt") as file:
     clientData = [file.readline().strip("\n") for x in range(5)]
-    desired = " ".split(file.readline().strip("\n"))
+    desired = file.readline().strip("\n").split(" ")
     index = file.readline().strip("\n")
 
 if len(sys.argv) < 6:
@@ -23,8 +24,8 @@ if period[-1:] == "m":
 else:
     period = int(period)
 
-desired = ["fullname", "title", "url", "permalink", "subreddit", "created", "over_18", "score"]
-tables = ["after" + str(x * period) for x in range(cycles+1)]
+database = "PostScraping"
+tables = ["after" + str(x) for x in range(cycles+1)]
 
 pscraper = PostScraper(database, clientData, tables, desired, index)
 pscraper.startScraping(period, subr, orgby, limit)

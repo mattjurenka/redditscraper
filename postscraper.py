@@ -41,7 +41,7 @@ class PostScraper:
             return default
     
     def setupTables(self, structure, names, overwrite=False, ifnotexists=False):
-        c = lambda z: [["score" + str((x + 1) * 10), "text"] for x in range(z)]
+        c = lambda z: [["score" + str(x + 1), "text"] for x in range(z)]
         structures = [structure + c(x) for x in range(len(names))]
         for i in range(len(names)):
             self.conn.createTable(names[i], structures[i], ifnotexists=ifnotexists, overwrite=overwrite)
