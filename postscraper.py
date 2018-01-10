@@ -2,7 +2,7 @@ from prawutils import PrawStream
 import time
 
 class PostScraper:
-    def __init__(self, database, clientData, tables=["after0", "after30", "after60", "after90", "after120", "after150", "after180"], desired=False):
+    def __init__(self, database, clientData, tables, desired=False, index=0):
         if database[-3:] != ".db":
             self.database = database + ".db"
         else:
@@ -19,6 +19,7 @@ class PostScraper:
         
         self.tables = tables
         self.structure = self.createStructure(self.desired)
+        self.index = 0
         
         self.connect()
         self.setupTables(self.structure, self.tables, True, True)
@@ -50,7 +51,7 @@ class PostScraper:
         stime = time.time()
         print("Scraping " + str(limit) + " posts from " + subr + "/" + orgby)
         for i in reversed(range(runs)):
-            self.prawstream.update(self.tables[i], self.tables[i+1], 0)
+            self.prawstream.update(self.tables[i], self.tables[i+1], self.index)
             self.conn.deleteTable(self.tables[i])
             self.prawstream.commit()
         self.prawstream.export(self.tables[0], subr, orgby, limit, self.desired)

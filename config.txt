@@ -1,0 +1,7 @@
+Sample Username
+Sample Password
+Client Id
+Client Secret
+Custom User Agent
+fullname title url permalink subreddit created over_18 score
+0

@@ -74,25 +74,27 @@ class PrawStream():
     #handles errors when post is deleted
     def getScoreList(self, submissionList):
         scoreList = []
+        deleted = []
         for i in submissionList:
             try:
                 scoreList.append(vars(i)["score"])
             except:
-                print("Post no longer exists")
-        return scoreList
+                deleted.append(i)
+        return scoreList, deleted
                 
     #inputs sql table and inserts those values into another table with an updated score
     def update(self, inittable, aftertable, index):
         rows = self.easyconn.select(inittable, "*")
-        updatedrows = []
-        for i in range(len(rows)):
-            try:
-                submission = self.reddit.info([rows[i][index]])
-                score = vars(list(submission)[0])["score"]
-                entry = list(rows[i]) + [score]
-                updatedrows.append(entry)
-            except:
-                print(rows[i][index] + " was deleted")
+        
+        fullnames = [x[index] for x in rows]
+        submissions = list(self.reddit.info(fullnames))
+        scoreList, deleted = self.getScoreList(submissions)
+        
+        for i in reversed(deleted):
+            del scoreList[i]
+            del rows[i]
+        
+        updatedrows = [list(rows[x]) + [scoreList[x]] for x in range(len(rows))]
         self.easyconn.insertIntoMany(aftertable, updatedrows)
         return True
     
