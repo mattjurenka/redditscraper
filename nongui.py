@@ -2,7 +2,11 @@ import sys
 import os
 from postscraper import PostScraper
 
-os.remove("PostScraping.db")
+database = "PostScraping.db"
+try:
+    os.remove(database)
+except:
+    pass
 
 with open("config.txt") as file:
     clientData = [file.readline().strip("\n") for x in range(5)]
@@ -11,7 +15,7 @@ with open("config.txt") as file:
 
 if len(sys.argv) < 6:
     print("Incorrect syntax, correct usage:")
-    print("nongui.py subreddit (new|hot|top) limit period")
+    print("nongui.py subreddit (new|hot|top) limit period cycles")
     sys.exit()
 
 subr = sys.argv[1]
@@ -24,7 +28,6 @@ if period[-1:] == "m":
 else:
     period = int(period)
 
-database = "PostScraping"
 tables = ["after" + str(x) for x in range(cycles+1)]
 
 pscraper = PostScraper(database, clientData, tables, desired, index)

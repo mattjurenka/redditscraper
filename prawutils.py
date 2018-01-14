@@ -85,16 +85,13 @@ class PrawStream():
     #inputs sql table and inserts those values into another table with an updated score
     def update(self, inittable, aftertable, index):
         rows = self.easyconn.select(inittable, "*")
+        rowDict = {x[index] : x for x in rows}
         
-        fullnames = [x[index] for x in rows]
+        fullnames = list(rowDict.keys())
         submissions = list(self.reddit.info(fullnames))
-        scoreList, deleted = self.getScoreList(submissions)
+        scoreDict, deleted = self.getScoreDict(submissions)
         
-        for i in reversed(deleted):
-            del scoreList[i]
-            del rows[i]
-        
-        updatedrows = [list(rows[x]) + [scoreList[x]] for x in range(len(rows))]
+        updatedrows = [list(rowDict[x]) + [scoreDict[x]] for x in scoreDict.keys()]
         self.easyconn.insertIntoMany(aftertable, updatedrows)
         return True
     
