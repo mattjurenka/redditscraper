@@ -72,15 +72,14 @@ class PrawStream():
         return True
     
     #handles errors when post is deleted
-    def getScoreList(self, submissionList):
-        scoreList = []
-        deleted = []
+    def getScoreDict(self, submissionList):
+        scoreDict = {}
         for i in submissionList:
             try:
-                scoreList.append(vars(i)["score"])
+                scoreDict[i.fullname] = vars(i)["score"]
             except:
-                deleted.append(i)
-        return scoreList, deleted
+                pass
+        return scoreDict
                 
     #inputs sql table and inserts those values into another table with an updated score
     def update(self, inittable, aftertable, index):
@@ -89,7 +88,7 @@ class PrawStream():
         
         fullnames = list(rowDict.keys())
         submissions = list(self.reddit.info(fullnames))
-        scoreDict, deleted = self.getScoreDict(submissions)
+        scoreDict = self.getScoreDict(submissions)
         
         updatedrows = [list(rowDict[x]) + [scoreDict[x]] for x in scoreDict.keys()]
         self.easyconn.insertIntoMany(aftertable, updatedrows)
